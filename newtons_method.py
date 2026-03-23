@@ -1,11 +1,7 @@
 import numpy as np
 import numpy.polynomial.polynomial as poly
 
-maxit = 2000
-TOL = 10e-13
-roots = []
-
-def newtons_method(init_guess, maxit, TOL):
+def newtons_method(init_guess, maxit, TOL, p):
     for k in range(maxit):
         f_x = p(init_guess)
         deriv = p.deriv()
@@ -25,15 +21,3 @@ def newtons_method(init_guess, maxit, TOL):
             break
     
     return init_guess
-        
-if __name__ == "__main__":
-    degree = int(input("what degree is the polynomial? "))
-    coeffs = []
-    for i in range(degree+1):
-        coeffs.append(int(input("Coefficient on power " + str(i) + " term: ")))
-    print(coeffs)
-    init_guess = int(input("Enter an initial guess: "))
-    p = poly.Polynomial(coeffs)
-    print(p)
-    newtons_method(init_guess, maxit, TOL)
-        
