@@ -18,7 +18,6 @@ for i in range(rows):
         if np.isnan(convergence[i,j]):
             rgb[i,j] = [1,0,0,1]
         else:
-            # current_color = 1 - (iter_counts[i,j] / np.max(iter_counts))
             brightness = (1 - iter_counts[i,j] / max_k)
             current_color = brightness * colors_array[int(convergence[i,j])]
             rgb[i,j] = current_color
