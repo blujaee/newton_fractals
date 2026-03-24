@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
-from main import degree, convergence, iter_counts, rows, cols, max_k
+from main import degree, convergence, iter_counts, rows, cols, max_k, roots
 
 def get_evenly_spaced_colors(n):
     cmap = mpl.colormaps["hsv"]
@@ -11,7 +11,7 @@ def get_evenly_spaced_colors(n):
     
     return colors
 
-colors_array = get_evenly_spaced_colors(degree)
+colors_array = get_evenly_spaced_colors(len(roots))
 rgb = np.zeros((rows,cols,4))
 for i in range(rows):
     for j in range(cols):
@@ -24,6 +24,6 @@ for i in range(rows):
 
 print(colors_array)
 plt.imshow(rgb, cmap='hsv', interpolation='nearest')
-plt.title("Basins of Convergence")
+plt.title("Basins of Attraction")
 plt.show()
 plt.pause(1)

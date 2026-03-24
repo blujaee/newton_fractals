@@ -31,7 +31,7 @@ roots = []
 iter_counts = np.zeros((rows,cols))
 colors = np.zeros((rows,cols,3))
 maxit = 2000
-TOL = 10e-13
+TOL = 1e-6
 p = poly.Polynomial(coeffs)
 print(p)
 max_k = 0
