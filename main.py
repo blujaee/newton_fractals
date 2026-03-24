@@ -1,13 +1,22 @@
 from newtons_method import newtons_method
+from multivariate_newtons_method import multivariate_newtons_method
 import numpy as np
 import numpy.polynomial.polynomial as poly
 import math as m
+
+# only allow coefficient input for now and then later add trig fns and stuff 
     
-degree = int(input("what degree is the polynomial? "))
-coeffs = np.array([])
-for i in range(degree+1):
-    coeffs = np.append(coeffs, int(input("Coefficient on power " + str(i) + " term: ")))
-#print(coeffs)
+num_poly = bool(input("How many polynomials?"))
+for j in range(num_poly+1):
+    degree = int(input("what degree is polynomial number " + str(j+1) + " ?"))
+    coeffs = np.array([])
+    if num_poly > 1:
+        vector = np.array([])
+        for i in range(num_poly):
+            vector = np.append(vector, int(input("what degree is the polynomial?")))
+    else:
+        for i in range(degree+1):
+            coeffs = np.append(coeffs, int(input("Coefficient on power " + str(i) + " term: ")))
 
 norm_factor = 1 / coeffs[degree]
 norm_coeffs = norm_factor * coeffs
@@ -39,7 +48,10 @@ max_k = 0
 for i in range(rows):
     for j in range(cols):
         init_guess = init_guesses[i,j]
-        converged, root, k = newtons_method(init_guess, maxit, TOL, p)
+        if num_poly == 1:
+            converged, root, k = multivariate_newtons_method(init_guess, maxit, TOL, p)
+        else:
+            converged, root, k = newtons_method(init_guess, maxit, TOL, p)
         if converged == True:
             for b,r in enumerate(roots):
                 if abs(root - r) < TOL:

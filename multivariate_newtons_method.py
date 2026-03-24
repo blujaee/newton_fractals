@@ -1,7 +1,9 @@
 import numpy as np
 import numpy.polynomial.polynomial as poly
 
-def newtons_method(init_guess, maxit, TOL, p):
+# needs to take a vector of functions from user input in main, generate the corresponding Jacobian mtx and apply Newton's Method
+
+def multivariate_newtons_method(init_guess, maxit, TOL, vector):
     converged = True
     deriv = p.deriv()
     for k in range(maxit):
