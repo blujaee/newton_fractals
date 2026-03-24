@@ -34,6 +34,7 @@ maxit = 2000
 TOL = 10e-13
 p = poly.Polynomial(coeffs)
 print(p)
+max_k = 0
 
 for i in range(rows):
     for j in range(cols):
@@ -45,6 +46,8 @@ for i in range(rows):
                     #print("no new roots to append")
                     convergence[i,j] = b
                     iter_counts[i,j] = k
+                    if k > max_k:
+                        max_k = k
                     break
             else:
                 #print("adding root to list")
