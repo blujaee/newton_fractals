@@ -3,30 +3,13 @@ from multivariate_newtons_method import multivariate_newtons_method
 import numpy as np
 import numpy.polynomial.polynomial as poly
 import math as m
+from get_expressions import get_expressions
 
-# only allow coefficient input for now and then later add trig fns and stuff 
-    
-num_poly = bool(input("How many polynomials?"))
-for j in range(num_poly+1):
-    degree = int(input("what degree is polynomial number " + str(j+1) + " ?"))
-    coeffs = np.array([])
-    if num_poly > 1:
-        vector = np.array([])
-        for i in range(num_poly):
-            vector = np.append(vector, int(input("what degree is the polynomial?")))
-    else:
-        for i in range(degree+1):
-            coeffs = np.append(coeffs, int(input("Coefficient on power " + str(i) + " term: ")))
+expressions_list, symbols_list, symbols_dict = get_expressions()
 
-norm_factor = 1 / coeffs[degree]
-norm_coeffs = norm_factor * coeffs
-cauchy_upper = 1 + np.max(np.abs(norm_coeffs))
-if cauchy_upper <0:
-    rounded_bound = m.floor(cauchy_upper)
-else:
-    rounded_bound = m.ceil(cauchy_upper)
+bound = 5
 
-x = np.linspace(-rounded_bound*2,rounded_bound*2,500)
+x = np.linspace(-bound,bound,500)
 y = x
 
 X, Y = np.meshgrid(x, y)
@@ -41,17 +24,20 @@ iter_counts = np.zeros((rows,cols))
 colors = np.zeros((rows,cols,3))
 maxit = 2000
 TOL = 1e-6
-p = poly.Polynomial(coeffs)
-print(p)
+
 max_k = 0
 
 for i in range(rows):
     for j in range(cols):
         init_guess = init_guesses[i,j]
-        if num_poly == 1:
-            converged, root, k = multivariate_newtons_method(init_guess, maxit, TOL, p)
+        if len(symbols_list) > 1:
+            expr = expressions_list[0]
+            var = symbols_list[0]
+            converged, root, k = multivariate_newtons_method(init_guess, maxit, TOL, expr, var)
         else:
-            converged, root, k = newtons_method(init_guess, maxit, TOL, p)
+            expr = expressions_list[0]
+            var = symbols_list[0]
+            converged, root, k = newtons_method(init_guess, maxit, TOL, symbols_list, symbols_dict)
         if converged == True:
             for b,r in enumerate(roots):
                 if abs(root - r) < TOL:
