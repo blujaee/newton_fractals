@@ -12,6 +12,9 @@ def get_expressions():
     while True:
         expr_input = input(f"Enter expression (or 'done'): ")
         if expr_input.lower() == 'done':
+            if not expressions_list:
+                print("Please enter at least one expression.")
+                continue
             break
         expr = parse_expr(expr_input, local_dict=symbols_dict)
         expressions_list.append(expr)

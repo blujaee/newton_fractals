@@ -9,3 +9,6 @@
 
 ![image2](img/img2.png)
 ##### x^3-1
+
+![image1](img/img3.png)
+##### x^2 - y - 1 and y^2 - x - 1
