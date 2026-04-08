@@ -19,4 +19,4 @@ def get_expressions():
     F = sympy.Matrix(expressions_list)
     J = F.jacobian(symbols_list)
     
-    return expressions_list, symbols_list, symbols_dict
+    return F, J, expressions_list, symbols_list, symbols_dict

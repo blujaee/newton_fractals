@@ -1,10 +1,13 @@
 import numpy as np
-from sympy import lambdify
-def newtons_method(init_guess, maxit, TOL, expr, var):
-    converged = True
+from sympy import lambdify, diff
+
+def make_newton_funcs(expr, var):
     f = lambdify(var, expr, "numpy")
-    deriv_expr = sympy.diff(expr, var)
-    f_prime = lambdify(var, deriv_expr, "numpy")
+    f_prime = lambdify(var, diff(expr, var), "numpy")
+    return f, f_prime
+
+def newtons_method(init_guess, maxit, TOL, f, f_prime):
+    converged = True
     for k in range(maxit):
         f_x = f(init_guess)
         f_prime_x = f_prime(init_guess)

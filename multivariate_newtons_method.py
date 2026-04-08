@@ -1,27 +1,38 @@
 import numpy as np
-import numpy.polynomial.polynomial as poly
+from sympy import lambdify
 
-# needs to take a vector of functions from user input in main, generate the corresponding Jacobian mtx and apply Newton's Method
 
-def multivariate_newtons_method(init_guess, maxit, TOL, vector):
+def make_multivariate_funcs(expressions_list, symbols_list, J_mat):
+    F_lambdas = [lambdify(symbols_list, expr, "numpy") for expr in expressions_list]
+    J_lambdas = [
+        [lambdify(symbols_list, J_mat[i, j], "numpy") for j in range(J_mat.shape[1])]
+        for i in range(J_mat.shape[0])
+    ]
+
+    def F_func(x):
+        return np.array([f(*x) for f in F_lambdas], dtype=complex)
+
+    def J_func(x):
+        return np.array([[entry(*x) for entry in row] for row in J_lambdas], dtype=complex)
+
+    return F_func, J_func
+
+
+def multivariate_newtons_method(init_guess, maxit, TOL, F_func, J_func):
     converged = True
-    deriv = p.deriv()
+    x = np.array(init_guess, dtype=complex)
     for k in range(maxit):
-        f_x = p(init_guess)
-        f_prime = deriv(init_guess)
-        if abs(f_prime) < TOL:
-            #print("failed to complete iteration due to division by 0")
+        F_val = F_func(x)
+        J_val = J_func(x)
+        if abs(np.linalg.det(J_val)) < TOL:
             converged = False
             break
-        new_guess = init_guess - (f_x / f_prime)
-        if abs(new_guess-init_guess) < TOL or abs(new_guess) < TOL:
-            #print("Converged at ", k, " iterations.")
-            #print("Root is: ", new_guess)
+        delta = np.linalg.solve(J_val, -F_val)
+        new_x = x + delta
+        if np.linalg.norm(new_x - x) < TOL:
             break
-        init_guess = new_guess
-        if k == maxit-1:
-            print("failed to converge, hit maxit")
+        x = new_x
+        if k == maxit - 1:
             converged = False
             break
-    
-    return converged, init_guess, k
+    return converged, x, k
